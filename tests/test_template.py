@@ -82,6 +82,8 @@ class TemplateTests(unittest.TestCase):
         for requirement in requirement_lines:
             self.assertIn("==", requirement)
         self.assertGreaterEqual(lock.count("--hash=sha256:"), len(requirement_lines))
+        dockerfile = (ROOT / "hermes-image/Dockerfile").read_text()
+        self.assertIn("uv pip install --no-config", dockerfile)
 
     def test_public_tree_contains_no_live_identifiers_or_secret_shapes(self) -> None:
         forbidden_literals = [

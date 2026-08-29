@@ -12,7 +12,7 @@ RUN uv pip install --python /opt/hermes/.venv/bin/python --no-cache \
 # The browser router source is byte-for-byte identical to the active live copy.
 COPY files/local-packages/super-browser /opt/super-browser
 RUN uv venv --python /opt/hermes/.venv/bin/python /opt/super-browser/.venv \
-    && uv pip install --python /opt/super-browser/.venv/bin/python \
+    && uv pip install --no-config --python /opt/super-browser/.venv/bin/python \
          --require-hashes --no-cache \
          -r /opt/super-browser/requirements-runtime.lock \
     && PLAYWRIGHT_BROWSERS_PATH=/opt/playwright \
