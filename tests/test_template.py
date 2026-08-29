@@ -69,6 +69,20 @@ class TemplateTests(unittest.TestCase):
             digest.hexdigest(),
         )
 
+    def test_super_browser_runtime_lock_is_exact_and_hashed(self) -> None:
+        lock = (ROOT / "files/local-packages/super-browser/requirements-runtime.lock").read_text()
+        for requirement in ("playwright==1.60.0", "browserbase==1.13.0", "browser-use-sdk==3.8.4"):
+            self.assertIn(requirement, lock)
+        requirement_lines = [
+            line.strip().removesuffix("\\").strip()
+            for line in lock.splitlines()
+            if line and not line[0].isspace() and not line.startswith("#")
+        ]
+        self.assertGreater(len(requirement_lines), 10)
+        for requirement in requirement_lines:
+            self.assertIn("==", requirement)
+        self.assertGreaterEqual(lock.count("--hash=sha256:"), len(requirement_lines))
+
     def test_public_tree_contains_no_live_identifiers_or_secret_shapes(self) -> None:
         forbidden_literals = [
             "104.236.11.200",

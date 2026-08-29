@@ -15,11 +15,6 @@ RUN uv venv --python /opt/hermes/.venv/bin/python /opt/super-browser/.venv \
     && uv pip install --python /opt/super-browser/.venv/bin/python \
          --require-hashes --no-cache \
          -r /opt/super-browser/requirements-runtime.lock \
-    && uv pip install --python /opt/super-browser/.venv/bin/python --no-cache \
-         mcp==1.28.0 \
-         playwright==1.60.0 \
-         browserbase==1.13.0 \
-         browser-use-sdk==3.8.4 \
     && PLAYWRIGHT_BROWSERS_PATH=/opt/playwright \
          /opt/super-browser/.venv/bin/python -m playwright install --with-deps chromium \
     && chmod +x /opt/super-browser/mcp/super-browser-server
