@@ -32,6 +32,9 @@ if [ -z "${TELEGRAM_BOT_TOKEN:-}" ] && \
    { [ -z "${SLACK_BOT_TOKEN:-}" ] || [ -z "${SLACK_APP_TOKEN:-}" ]; }; then
   fail "connect Telegram, or provide both Slack tokens, before launching"
 fi
+if [ -n "${SLACK_BOT_TOKEN:-}" ] && [ -z "${SLACK_ALLOWED_USERS:-}" ]; then
+  fail "SLACK_ALLOWED_USERS must contain the authorized owner's Slack Member ID"
+fi
 
 SLACK_ENABLED=false
 TELEGRAM_ENABLED=false

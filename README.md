@@ -25,7 +25,8 @@ commit a key after I provide it.
 
 Install the Operator with setup.sh, prove the container is healthy, and prove a
 real message works. Start with Telegram for the fastest setup unless I choose
-Slack. If I choose Slack, use the included slack-manifest.yml. After launch,
+Slack. If I choose Slack, follow docs/SLACK-SETUP.md and use the included
+current Agent-view slack-manifest.yml. Authorize my exact Slack Member ID. After launch,
 offer Calendar and inboxes through Composio, proposals through PandaDoc, and
 Slack, Telegram, iMessage/BlueBubbles, WhatsApp, Discord, or the private browser
 dashboard as messaging choices.
@@ -45,7 +46,7 @@ charges; the setup agent handles the technical work.
 
 | Area | Included |
 |---|---|
-| Hosted brain | Hermes Agent 0.20.0 on a private Ubuntu VPS |
+| Hosted brain | Digest-pinned Hermes Agent 0.20.6 on a private Ubuntu VPS |
 | Messaging | Telegram, Slack, Discord, WhatsApp, iMessage via BlueBubbles, private dashboard |
 | Calendar and inboxes | Google Calendar, Gmail, Outlook, and other apps through Composio |
 | Proposals | Private document drafting plus PandaDoc connection |
@@ -63,7 +64,8 @@ The finish menu can add it later without rebuilding the server.
 1. The setup agent creates or connects to a fresh Ubuntu VPS.
 2. It clones this repository and runs `./setup.sh`.
 3. The installer asks for an Operator name, timezone, OpenRouter key, and either
-   Telegram or Slack. Every secret entry is hidden.
+   Telegram or Slack. Slack also requires the owner's Member ID. Every secret
+   entry is hidden.
 4. It builds the exact hosted runtime, starts it, and waits for a healthy result.
 5. The finish menu offers business apps, more messaging apps, a complete Slack
    manifest, and optional computer-control guidance.
@@ -80,15 +82,17 @@ The finish menu can add it later without rebuilding the server.
 
 ## Slack
 
-The ready-to-paste starter manifest is [slack-manifest.yml](slack-manifest.yml).
-It includes Socket Mode, message/file/channel permissions, events, and essential
-slash commands. After the Operator is running, its finish menu generates the
-complete manifest for every Hermes slash command at:
+The ready-to-paste current manifest is [slack-manifest.yml](slack-manifest.yml).
+It includes Socket Mode, Slack Agent view, message/file/channel permissions,
+events, buttons, and the current 50 native Hermes commands. After the Operator
+is running, its finish menu generates the exact runtime manifest at:
 
 `/srv/<operator>/hermes/data/slack-manifest.json`
 
 The Slack app can see only channels it is allowed to access. Invite it only to
-the channels the owner wants the Operator to use.
+the channels the owner wants the Operator to use. Hermes also requires
+`SLACK_ALLOWED_USERS`, so the installer collects the authorized owner's Member
+ID. Follow [the screen-by-screen Slack guide](docs/SLACK-SETUP.md).
 
 ## Calendar, inboxes, and proposals
 
@@ -112,7 +116,9 @@ cd head-of-ops
 
 Detailed beginner instructions are in [START-HERE.md](START-HERE.md). The live
 tool ledger is in [docs/LIVE-PARITY.md](docs/LIVE-PARITY.md), and the full tool
-map is in [docs/TOOLS.md](docs/TOOLS.md).
+map is in [docs/TOOLS.md](docs/TOOLS.md). See [docs/SKILLS.md](docs/SKILLS.md)
+for installed and optional skills and [docs/UPDATES.md](docs/UPDATES.md) for the
+reviewed update process.
 
 ## Public/private boundary
 

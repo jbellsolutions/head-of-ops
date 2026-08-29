@@ -102,6 +102,8 @@ CHANNEL_CHOICE="$(ask "Choose 1, 2, or 3" "1")"
 TELEGRAM_BOT_TOKEN=""
 SLACK_BOT_TOKEN=""
 SLACK_APP_TOKEN=""
+SLACK_ALLOWED_USERS=""
+SLACK_HOME_CHANNEL=""
 case "$CHANNEL_CHOICE" in
   1|3)
     echo "In Telegram, open @BotFather, create a bot, and copy its token."
@@ -111,14 +113,24 @@ case "$CHANNEL_CHOICE" in
 esac
 case "$CHANNEL_CHOICE" in
   2|3)
-    echo "Create a Slack app from this ready-made manifest:"
+    echo "Create a Slack app from this current Agent-view manifest:"
     echo "  $REPO_DIR/slack-manifest.yml"
     echo "Choose 'From an app manifest' at https://api.slack.com/apps."
+    echo "Agent view is permanent for this Slack app after Slack applies it."
     echo "Install the app, then create an app-level token with connections:write."
     SLACK_BOT_TOKEN="$(ask_secret "Paste the Slack bot token")"
     SLACK_APP_TOKEN="$(ask_secret "Paste the Slack app token")"
-    [ -n "$SLACK_BOT_TOKEN" ] && [ -n "$SLACK_APP_TOKEN" ] || \
-      fail "both Slack tokens are required"
+    [[ "$SLACK_BOT_TOKEN" == xoxb-* ]] || \
+      fail "the Slack Bot Token must begin with xoxb-"
+    [[ "$SLACK_APP_TOKEN" == xapp-* ]] || \
+      fail "the Slack App Token must begin with xapp-"
+    echo "In Slack, open your profile → three dots → Copy member ID."
+    SLACK_ALLOWED_USERS="$(ask "Paste the owner's Slack Member ID; use commas for more than one")"
+    SLACK_ALLOWED_USERS="${SLACK_ALLOWED_USERS//[[:space:]]/}"
+    [[ "$SLACK_ALLOWED_USERS" =~ ^[UW][A-Z0-9]+(,[UW][A-Z0-9]+)*$ ]] || \
+      fail "Slack Member IDs look like U01ABC123; separate multiple IDs with commas"
+    echo "Optional: copy the ID of one private home channel for scheduled updates."
+    SLACK_HOME_CHANNEL="$(ask "Paste the home channel ID, or press Enter to skip")"
     ;;
   1) ;;
   *) fail "choose 1, 2, or 3" ;;
@@ -147,6 +159,8 @@ write_value OPENROUTER_API_KEY "$OPENROUTER_API_KEY"
 write_value TELEGRAM_BOT_TOKEN "$TELEGRAM_BOT_TOKEN"
 write_value SLACK_BOT_TOKEN "$SLACK_BOT_TOKEN"
 write_value SLACK_APP_TOKEN "$SLACK_APP_TOKEN"
+write_value SLACK_ALLOWED_USERS "$SLACK_ALLOWED_USERS"
+write_value SLACK_HOME_CHANNEL "$SLACK_HOME_CHANNEL"
 write_value DISCORD_BOT_TOKEN ""
 write_value BLUEBUBBLES_SERVER_URL ""
 write_value BLUEBUBBLES_PASSWORD ""
@@ -194,8 +208,12 @@ if [ -n "$SLACK_BOT_TOKEN" ]; then
     --write /opt/data/slack-manifest.json \
     --name "$AGENT_NAME" \
     --description "Your private hosted AI Operator" \
-    --no-assistant >/dev/null || true
+    --agent-view >/dev/null || true
   echo "Complete Slack manifest: $BASE_DIR/hermes/data/slack-manifest.json"
+  echo "Slack test 1: open the app in Slack and send: hello"
+  echo "Slack test 2: invite it to one approved channel and send:"
+  echo "  @$AGENT_NAME Give me a one-sentence status check."
+  echo "Slack test 3: reply in that thread without another mention."
 fi
 echo
 echo "To open the private dashboard from your computer, use:"

@@ -9,7 +9,8 @@ blank DigitalOcean account to a working hosted Operator.
 - Confirm the repository's default branch passes CI.
 - Keep one prebuilt Droplet available as a fallback for slow image downloads.
 - Put the master prompt from `README.md` in a copyable webinar chat message.
-- Have the participant use Telegram for the shortest path.
+- For a Slack webinar, have a workspace owner present and use a fresh Slack
+  app so the permanent Agent-view choice is easy to explain.
 
 ## Live sequence
 
@@ -34,20 +35,23 @@ The participant signs in and approves the server charge. The setup agent chooses
 Ubuntu LTS, the recommended live machine shape, a nearby region, and SSH-key
 authentication. It records the host without exposing the private key.
 
-### 4. Connect only two things
+### 4. Connect the model and Slack
 
 For the first healthy reply, connect:
 
 1. OpenRouter.
-2. Telegram through BotFather.
+2. Slack by following [SLACK-SETUP.md](SLACK-SETUP.md) one screen at a time.
 
-Skip every optional field. This keeps the demo moving even if a third-party
-OAuth service is slow.
+Use the included Agent-view manifest, the hidden `xoxb-` and `xapp-` prompts,
+and the participant's copied Slack Member ID. Skip Calendar and every other
+optional account until Slack answers.
 
-### 5. Prove the bot
+### 5. Prove Slack
 
-The participant sends `hello`, then asks the role-and-tools test from
-`START-HERE.md`. Do not continue until the reply arrives.
+The participant sends `hello` in a direct message, `@mentions` Head of Ops once
+in an approved channel, then follows up in that thread without another mention.
+Test `/help`, `/reload-skills`, and one button. Do not continue until every reply
+arrives.
 
 ### 6. Connect Calendar
 
@@ -80,5 +84,6 @@ final “anything else?” question and the “we're all done” confirmation.
 ## Definition of done
 
 The participant leaves with a healthy always-on Operator, private dashboard
-access, a working messaging channel, a read-tested calendar/inbox connection,
-an unsent proposal draft, and a private personalized knowledge vault.
+access, fully proven Slack behavior, included skills plus owner-review controls,
+a read-tested calendar/inbox connection, an unsent proposal draft, and a
+private personalized knowledge vault.

@@ -12,7 +12,7 @@ while true; do
 
   1. Connect Calendar, inboxes, documents, and proposals
   2. Add Slack, Telegram, iMessage, WhatsApp, or Discord
-  3. Create the complete Slack manifest
+  3. Create the current Slack Agent-view manifest
   4. Review optional computer control
   5. All done
 MENU
@@ -26,7 +26,7 @@ MENU
       operator_load_env
       operator_init_docker
       manifest="$(operator_generate_slack_manifest)"
-      echo "Complete Slack manifest created at: $manifest"
+      echo "Current Slack Agent-view manifest created at: $manifest"
       ;;
     4)
       cat <<'TEXT'

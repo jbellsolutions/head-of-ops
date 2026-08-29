@@ -3,7 +3,7 @@
 
 services:
   hermes:
-    image: head-of-ops-hermes:0.20.0-live
+    image: head-of-ops-hermes:0.20.6-reviewed
     build:
       context: .
       dockerfile: hermes-image/Dockerfile
@@ -31,6 +31,7 @@ services:
       # Messaging channels
       SLACK_BOT_TOKEN: ${SLACK_BOT_TOKEN:-}
       SLACK_APP_TOKEN: ${SLACK_APP_TOKEN:-}
+      SLACK_ALLOWED_USERS: ${SLACK_ALLOWED_USERS:-}
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
       DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN:-}
       BLUEBUBBLES_SERVER_URL: ${BLUEBUBBLES_SERVER_URL:-}

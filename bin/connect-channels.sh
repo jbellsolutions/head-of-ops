@@ -35,19 +35,27 @@ MENU
     2)
       echo "In Slack, create an app from this manifest:"
       echo "  $OPERATOR_BASE_DIR/slack-manifest.yml"
+      echo "This manifest uses Slack Agent view, which cannot be reverted on that app."
       echo "Install it to the chosen workspace, then create an app-level token"
       echo "with connections:write under Basic Information → App-Level Tokens."
       bot_token="$(operator_secret "Paste the Slack Bot Token beginning xoxb-")"
       app_token="$(operator_secret "Paste the Slack App Token beginning xapp-")"
-      [ -n "$bot_token" ] && [ -n "$app_token" ] || \
-        operator_fail "both Slack tokens are required"
+      [[ "$bot_token" == xoxb-* ]] || operator_fail "the Bot Token must begin with xoxb-"
+      [[ "$app_token" == xapp-* ]] || operator_fail "the App Token must begin with xapp-"
+      echo "Open your Slack profile → three dots → Copy member ID."
+      read -r -p "Authorized Slack Member ID(s), comma separated: " allowed_users
+      allowed_users="${allowed_users//[[:space:]]/}"
+      [[ "$allowed_users" =~ ^[UW][A-Z0-9]+(,[UW][A-Z0-9]+)*$ ]] || \
+        operator_fail "Member IDs look like U01ABC123"
       operator_save_value SLACK_BOT_TOKEN "$bot_token"
       operator_save_value SLACK_APP_TOKEN "$app_token"
+      operator_save_value SLACK_ALLOWED_USERS "$allowed_users"
       operator_refresh
       full_manifest="$(operator_generate_slack_manifest)"
       echo "Slack was added. The complete slash-command manifest is at:"
       echo "  $full_manifest"
       echo "Invite the Operator app to each channel it may read."
+      echo "Test a DM, then @mention it once in an approved channel and continue in the thread."
       ;;
     3)
       echo "iMessage needs the free BlueBubbles server running on a Mac."

@@ -40,7 +40,7 @@ usable only after its own connection or read-only test succeeds.
 | Channel | Connection | First safe test |
 |---|---|---|
 | Telegram | BotFather bot token | send and receive `hello` |
-| Slack | included app manifest + Socket Mode tokens | list visible channel names |
+| Slack | Agent-view manifest + Socket Mode tokens + owner Member ID | DM `hello`, then test an `@mention` and thread follow-up |
 | iMessage | BlueBubbles server on an owner-controlled Mac | complete DM pairing and send `hello` |
 | WhatsApp | Hermes QR pairing | send and receive `hello` |
 | Discord | Discord bot token | answer in one approved server/channel |
@@ -67,3 +67,6 @@ The durable checklist is:
 
 The presence of a key is not proof. Mark a connection verified only after the
 least-privileged safe test succeeds.
+
+The full included-skill list, Slack invocation examples, owner-review flow, and
+safe Hub update commands are in [SKILLS.md](SKILLS.md).

@@ -72,6 +72,6 @@ operator_generate_slack_manifest() {
       --write /opt/data/slack-manifest.json \
       --name "${AGENT_NAME:-Head of Ops}" \
       --description "Your private hosted AI Operator" \
-      --no-assistant >/dev/null
+      --agent-view >/dev/null
   printf '%s\n' "$OPERATOR_BASE_DIR/hermes/data/slack-manifest.json"
 }

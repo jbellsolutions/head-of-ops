@@ -18,6 +18,7 @@ class TemplateTests(unittest.TestCase):
             "README.md",
             "START-HERE.md",
             "setup.sh",
+            "update.sh",
             "new-agent.sh",
             "compose.yml",
             "hermes-image/Dockerfile",
@@ -38,6 +39,9 @@ class TemplateTests(unittest.TestCase):
             "files/skills/productivity/calendar-operator/SKILL.md",
             "docs/WEBINAR-WALKTHROUGH.md",
             "docs/LIVE-PARITY.md",
+            "docs/SLACK-SETUP.md",
+            "docs/SKILLS.md",
+            "docs/UPDATES.md",
         ]
         for relative in required:
             self.assertTrue((ROOT / relative).is_file(), relative)
@@ -45,7 +49,7 @@ class TemplateTests(unittest.TestCase):
     def test_live_image_is_digest_pinned(self) -> None:
         dockerfile = (ROOT / "hermes-image/Dockerfile").read_text()
         self.assertIn(
-            "nousresearch/hermes-agent@sha256:248024e18a05b0ee2d600a81538b1a3fd60653afa699814f68c2bdd928c19b47",
+            "nousresearch/hermes-agent:v2026.8.27@sha256:e0df6adebddf29b91112aefc999d4aaf6846c9eb544faca5672a16a13590ff79",
             dockerfile,
         )
         self.assertNotIn(":latest", dockerfile)
@@ -148,6 +152,9 @@ class TemplateTests(unittest.TestCase):
         self.assertNotIn("copywriting_retrieval:", text)
         self.assertNotIn("composio:", text)
         self.assertIn("fallback_providers: []", text)
+        self.assertIn("tail_mode: lean", text)
+        self.assertIn("write_approval: true", text)
+        self.assertIn("guard_agent_created: true", text)
         self.assertNotIn("__", text)
 
     def test_full_config_render_adds_calendar_and_fallbacks(self) -> None:
@@ -222,6 +229,10 @@ class TemplateTests(unittest.TestCase):
         manifest = (ROOT / "slack-manifest.yml").read_text()
         for required in (
             "socket_mode_enabled: true",
+            "agent_view:",
+            "assistant:write",
+            "app_context_changed",
+            "app_home_opened",
             "app_mentions:read",
             "channels:history",
             "chat:write",
@@ -229,8 +240,10 @@ class TemplateTests(unittest.TestCase):
             "message.im",
             "message.channels",
             "command: /hermes",
+            "command: /reload-skills",
         ):
             self.assertIn(required, manifest)
+        self.assertEqual(50, manifest.count("  - command:"))
         finish = (ROOT / "bin/finish-setup.sh").read_text()
         self.assertIn("iMessage", finish)
         self.assertIn("Calendar", finish)
@@ -248,6 +261,21 @@ class TemplateTests(unittest.TestCase):
         self.assertIn("name: Head of Ops", manifest)
         for text in (readme, start_here, provisioner):
             self.assertNotIn("jbellsolutions/revenue-partner-agent", text)
+
+    def test_slack_is_owner_allowlisted_and_current(self) -> None:
+        setup = (ROOT / "setup.sh").read_text()
+        channels = (ROOT / "bin/connect-channels.sh").read_text()
+        compose = (ROOT / "compose.yml").read_text()
+        config = (ROOT / "agent.example.env").read_text()
+        for text in (setup, channels):
+            self.assertIn("Slack Member ID", text)
+            self.assertIn("SLACK_ALLOWED_USERS", text)
+        operator_lib = (ROOT / "bin/operator-lib.sh").read_text()
+        self.assertIn("--agent-view", setup)
+        self.assertIn("--agent-view", operator_lib)
+        self.assertIn("SLACK_ALLOWED_USERS: ${SLACK_ALLOWED_USERS:-}", compose)
+        self.assertIn("SLACK_ALLOWED_USERS=", config)
+        self.assertNotIn("--no-assistant", setup + operator_lib)
 
     def test_deployed_copy_contains_post_launch_setup_assets(self) -> None:
         installer = (ROOT / "new-agent.sh").read_text()

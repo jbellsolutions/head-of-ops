@@ -1,5 +1,6 @@
-# Exact Hermes release and digest running on the live Single Brain operator.
-FROM nousresearch/hermes-agent@sha256:248024e18a05b0ee2d600a81538b1a3fd60653afa699814f68c2bdd928c19b47
+# Reviewed Hermes Agent v0.20.6 release. The tag is readable and the digest
+# makes every build use the exact same upstream image.
+FROM nousresearch/hermes-agent:v2026.8.27@sha256:e0df6adebddf29b91112aefc999d4aaf6846c9eb544faca5672a16a13590ff79
 
 USER root
 

@@ -50,16 +50,20 @@ The installer asks one thing at a time:
 Choose Telegram for the shortest first setup. Open `@BotFather`, create a bot,
 and paste its token into the hidden prompt.
 
-For Slack, the setup agent opens [slack-manifest.yml](slack-manifest.yml), goes
-to [Slack Apps](https://api.slack.com/apps), chooses **Create New App → From an
-app manifest**, selects the workspace, pastes the manifest, and creates the app.
-It then:
+For Slack, the setup agent follows [the screen-by-screen Slack guide](docs/SLACK-SETUP.md),
+opens [slack-manifest.yml](slack-manifest.yml), goes to
+[Slack Apps](https://api.slack.com/apps), chooses **Create New App → From an app
+manifest**, selects the workspace, pastes the manifest, and creates the app.
+The current manifest uses Slack Agent view; Slack cannot change that app back
+to the older messages interface after it is applied. The setup agent then:
 
 1. Installs the app to the workspace and copies the `xoxb-` Bot Token.
 2. Opens **Basic Information → App-Level Tokens**.
 3. Creates an `xapp-` token with `connections:write`.
-4. Pastes each token only into its hidden installer prompt.
-5. Invites the app only to channels the Operator may read.
+4. Copies the owner's Slack Member ID from the owner's profile menu.
+5. Pastes both tokens only into hidden installer prompts and enters the Member
+   ID in the owner allowlist prompt.
+6. Invites the app only to channels the Operator may read.
 
 Secrets are stored only in `/srv/<operator>/.env` with private file permissions.
 
@@ -161,6 +165,8 @@ Setup is complete only when:
 - The owner has chosen quick start or completed guided personalization.
 - Requested Calendar/inbox/proposal connections pass their safe tests.
 - The chosen messaging channels work.
+- Slack passes a DM, an `@mention` in a channel, and a follow-up in that thread.
+- Included skills load, and agent-authored skill changes wait for owner review.
 - `scripts/verify.sh` passes.
 - No key, customer data, proprietary skill, or private account ID is in git.
 

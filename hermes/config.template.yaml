@@ -63,6 +63,14 @@ compression:
   threshold: 0.5
   target_ratio: 0.2
   protect_last_n: 20
+  tail_mode: lean
+
+# Preserve the self-improvement loop while requiring the owner to review every
+# agent-authored skill change before it becomes active.
+skills:
+  creation_nudge_interval: 15
+  write_approval: true
+  guard_agent_created: true
 
 memory:
   memory_enabled: true

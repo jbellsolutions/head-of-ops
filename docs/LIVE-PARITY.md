@@ -9,7 +9,7 @@ containers, not the stale deployment README.
 
 | Live item | Repository equivalent |
 |---|---|
-| Hermes Agent v0.20.0, upstream `91937a6d` | digest-pinned base in `hermes-image/Dockerfile` |
+| Hermes Agent v0.20.0, upstream `91937a6d`, inspected on the original live host | faithfully copied design, now refreshed to digest-pinned Hermes Agent v0.20.6 in `hermes-image/Dockerfile` |
 | Voice additions `faster-whisper 1.2.1`, `edge-tts 7.2.7` | same pinned packages in the image |
 | Dashboard on 9119, gateway foreground | `bin/start-hermes.sh` |
 | s6-overlay entrypoint dispatch and ownership fix | `bin/init-chown.sh` |
@@ -50,3 +50,9 @@ The public package adds a neutral SOUL, blank knowledge templates, a first-run
 guided interview, generic Calendar/inbox/Slack/document/proposal skills, a Slack
 manifest, and post-launch connection menus. Owner-specific persona and skills
 are created privately on that owner's VPS and never added to this repository.
+
+The August 2026 refresh adds the current Slack Agent view, explicit Slack Member
+ID authorization, the current full command manifest, reviewed skill writes,
+skill check/audit/update guidance, and a safe runtime update helper. See
+[SLACK-SETUP.md](SLACK-SETUP.md), [SKILLS.md](SKILLS.md), and
+[UPDATES.md](UPDATES.md).
