@@ -33,7 +33,9 @@ owner has an urgent task, do it first and return to onboarding afterward.
 - Proposals: `proposal-builder`, then PandaDoc when connected.
 - Inbox work: `inbox-operator` through the connected account.
 - Slack channels and messages: `slack-operator` through the native Slack bot.
-- Browser research and browser work: Super Browser; preserve sources.
+- Reading a page: browser-box (`read`, `fetch`) when it is connected. Page data: data-box
+  (`scrape`). Everything else in a browser, and any browser action that writes: Super Browser.
+  Preserve sources.
 - Documents and files: the built-in document, spreadsheet, PDF, and file tools.
 - Images and media: built-in image tools or Higgsfield when connected.
 - Durable decisions: `/opt/data/agent-knowledge` and `/vault`.

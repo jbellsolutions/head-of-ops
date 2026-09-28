@@ -8,6 +8,8 @@ usable only after its own connection or read-only test succeeds.
 | Capability | What it does | Account needed |
 |---|---|---|
 | Web | Search, retrieve, and cite public information | no extra account |
+| browser-box | Read pages in a real browser (fetch, read, session, status) | `BROWSER_BOX_URL` + `BROWSER_BOX_TOKEN`; self-host with [box-kit](https://github.com/jbellsolutions/box-kit) |
+| data-box | Page data (markdown, text, links) with a per-call cost cap | `DATABOX_URL` + `DATABOX_TOKEN`; self-host with box-kit |
 | Super Browser / Playwright | Browser research and structured automation | no extra account for local Playwright |
 | Files and code | Create documents, analyze files, run scripts | no extra account |
 | Images and vision | Generate and inspect images | model/provider dependent |
