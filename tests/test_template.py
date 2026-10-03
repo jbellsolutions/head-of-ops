@@ -222,7 +222,7 @@ class TemplateTests(unittest.TestCase):
             **os.environ,
             "HERMES_MODEL": "openai/gpt-5.6-luna",
             "AGENT_PERSONA": "concise",
-            "BROWSER_BOX_URL": "https://box.example.test/",
+            "BROWSER_BOX_URL": "https://box.example.test/mcp",
             "BROWSER_BOX_TOKEN": "placeholder-box",
             "DATABOX_URL": "https://data.example.test",
             "DATABOX_TOKEN": "placeholder-data",
@@ -244,6 +244,8 @@ class TemplateTests(unittest.TestCase):
         self.assertIn('Authorization: "Bearer placeholder-box"', text)
         self.assertIn("include: [fetch, read, session, status]", text)
         self.assertIn('url: "https://data.example.test/mcp"', text)
+        self.assertNotIn("/mcp/mcp", text)
+        self.assertIn("include: [status, scrape, job]", text)
         self.assertIn("super-browser:", text)
         self.assertNotIn("__", text)
 
