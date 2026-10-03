@@ -136,6 +136,10 @@ class TemplateTests(unittest.TestCase):
             "DEEPSEEK_API_KEY",
             "TOGETHER_API_KEY",
             "COMPOSIO_API_KEY",
+            "BROWSER_BOX_URL",
+            "BROWSER_BOX_TOKEN",
+            "DATABOX_URL",
+            "DATABOX_TOKEN",
             "TELEGRAM_HOME_CHANNEL",
             "SLACK_HOME_CHANNEL",
             "SLACK_BOT_TOKEN",
@@ -167,6 +171,8 @@ class TemplateTests(unittest.TestCase):
         self.assertIn("higgsfield:", text)
         self.assertNotIn("copywriting_retrieval:", text)
         self.assertNotIn("composio:", text)
+        self.assertNotIn("browser-box:", text)
+        self.assertNotIn("data-box:", text)
         self.assertIn("fallback_providers: []", text)
         self.assertIn("tail_mode: lean", text)
         self.assertIn("write_approval: true", text)
@@ -209,6 +215,38 @@ class TemplateTests(unittest.TestCase):
         self.assertIn("api.together.xyz", text)
         self.assertIn("discord:\n    enabled: true", text)
         self.assertIn("bluebubbles:\n    enabled: true", text)
+        self.assertNotIn("__", text)
+
+    def test_config_render_attaches_browser_box_read_only_and_data_box(self) -> None:
+        env = {
+            **os.environ,
+            "HERMES_MODEL": "openai/gpt-5.6-luna",
+            "AGENT_PERSONA": "concise",
+            "BROWSER_BOX_URL": "https://box.example.test/mcp",
+            "BROWSER_BOX_TOKEN": "placeholder-box",
+            "DATABOX_URL": "https://data.example.test",
+            "DATABOX_TOKEN": "placeholder-data",
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / "config.yaml"
+            subprocess.run(
+                [
+                    "python3",
+                    str(ROOT / "scripts/render_config.py"),
+                    str(ROOT / "hermes/config.template.yaml"),
+                    str(output),
+                ],
+                env=env,
+                check=True,
+            )
+            text = output.read_text()
+        self.assertIn('url: "https://box.example.test/mcp"', text)
+        self.assertIn('Authorization: "Bearer placeholder-box"', text)
+        self.assertIn("include: [fetch, read, session, status]", text)
+        self.assertIn('url: "https://data.example.test/mcp"', text)
+        self.assertNotIn("/mcp/mcp", text)
+        self.assertIn("include: [status, scrape, job]", text)
+        self.assertIn("super-browser:", text)
         self.assertNotIn("__", text)
 
     def test_skill_frontmatter_is_present(self) -> None:
